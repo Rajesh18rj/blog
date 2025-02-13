@@ -71,5 +71,88 @@ $table->foreignIdFor(User::class); -> if we give foreignId (foreignIdFor) like t
 
 fill the tables and add some fake data in for factory then try to access it for in tinker , that's it .. 
 
+# 4 working on homepage
 
+use the app-layout as home page layout 
 
+copy the home page code from static github html code .. (from that github)
+
+make some cleanups in home.blade 
+
+then make a controller for HomePage 
+> php artisan make:controller HomeController -i
+
+why we are creating invoke controller ? becoz we are going to do only one task, that's why 
+
+goto HomeController , return the home page view
+
+    public function __invoke(Request $request)
+    {
+        return view('home');
+    }
+then change the route..
+
+    Route::get('/', HomeController::class);
+
+try to pass some data from HomeController to home.blade file (for education purpose)
+
+then we are going to create a new component
+> $ php artisan make:component Posts/PostCard --view
+
+why we are giving view flag ? becoz usually if we didnt give view flag laravel creates Class and View file , but we need only view file that's why we give flag (view)
+
+then cut the post card related things pasted in it .. then replace it with a <x-posts.post-card />
+
+then we are going to pass the props in it .. 
+
+```bladehtml
+    @foreach($featuredPosts as $post)
+        <div class="md:col-span-1 col-span-3">
+            <x-posts.post-card :post="$post" />
+        </div>
+    @endforeach
+```
+just like this .. 
+
+then add props in post-card to
+
+    @props(['post'])
+
+that's it... 
+
+do that same for Latest Posts 
+
+we can do more dynamic (original data)
+
+    public function __invoke(Request $request)
+    {
+        return view('home', [
+        'featuredPosts' => Post::where('published_at', '<=', Carbon::now())->take(3)->get(),
+
+instead of this big write queries in controller we can do that in scope(In model)
+
+    public function scopePublished($query){
+        $query->where('published_at', '<=', Carbon::now());
+    }
+just like this.. 
+and back to Controller add that published() [skip that (scope) prefix]
+
+    'featuredPosts' => Post::published()->take(3)->get(),
+just like this .. it works perfectly as it before .. 
+
+we can do same like this for featured too.. (scope)
+
+    public function scopeFeatured($query){
+        $query->where('featured', true);
+    }
+then go to controller .. 
+
+    'featuredPosts' => Post::published()->featured()->take(3)->get(),
+that's it.. 
+
+then we are going to do exact same thing what we did in featuredPosts -> latestPosts
+
+    'featuredPosts' => Post::published()->featured()->latest('published_at')->take(3)->get(),
+    'latestPosts' => Post::published()->latest('published_at')->get(), #[Note this]
+
+then we do change in logo .. 
