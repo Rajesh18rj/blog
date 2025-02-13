@@ -51,3 +51,25 @@ put those codes into this..
 
 now its working as before .. 
 
+# 3 Creating database schema 
+
+what table are we need ? 
+1.post
+2.category
+3.category_post
+4.likes
+5.comments
+6.roles
+
+first we are going to create first 3 -> 
+
+for Post -> Model, Migrations, Controller, Factory
+for category -> Model , Migration, Factory 
+for category_post -> migration only.. 
+
+$table->foreignIdFor(User::class); -> if we give foreignId (foreignIdFor) like this laravel automatically understands User class , we dont need to define column name.
+
+fill the tables and add some fake data in for factory then try to access it for in tinker , that's it .. 
+
+
+
