@@ -156,3 +156,90 @@ then we are going to do exact same thing what we did in featuredPosts -> latestP
     'latestPosts' => Post::published()->latest('published_at')->get(), #[Note this]
 
 then we do change in logo .. 
+
+# 5 working on Blog Page Stub
+
+we are making some changes in profile 
+
+then after we logged we need to redirect home page so , 
+goto -> config -> fortify -> there is section home change its value
+just like this -> 'home' => '/',
+
+then we are going to create a blog(posts)
+first create a route for it ..
+ - Route::get('/blog', PostController::class, 'index')->name('posts.index'); //posts
+
+then create that posts.index file 
+
+then create that index action (we defined in controller) on PostController
+
+    public function index(){
+        return view('posts.index');
+    }
+
+then go to that github html code page copy the main content in blog.html .. 
+paste that in posts.index (inside of the x-layout tag)
+
+then create a component for storing post-item
+-  php artisan make:component Posts/PostItem --view
+
+then cut the whole article tag and paste in it .. 
+
+then replace this <x-posts.post-item /> in index file 
+
+for we can pass this data from controller to index blade 
+
+    public function index(){
+        return view('posts.index', [
+            'posts' => Post::take(5)->get()
+        ]);
+    }
+then loop over in index file
+
+    @foreach($posts as $post)
+        <x-posts.post-item :post="$post" />
+    @endforeach
+
+then pass the props in post-item 
+
+that's it works fine .. 
+
+then make a changes in post-item , make it dynamic .
+
+then we are counting the readingTime 
+
+goto -> post model 
+
+    public function getReadingTime(){
+        $mins = round(str_word_count($this->body)/ 250);
+        return ($mins < 1) ? 1 : $mins;
+    }
+then apply this in post-item .. 
+
+that's it .. 
+
+# 6 
+ Today we are going to create our first livewire component for Post List 
+
+> php artisan make:livewire PostList
+
+    #[Computed()]
+    public function posts(){
+        return Post::take(5)->get();
+    }
+
+ipdi Computed Attribute use pannum pothu, ovoru  public property um assign pannanum nu avasiyam illa .. 
+
+then 
+    blade file la itha epdi call pannanum naa.. 
+
+        @foreach($this->posts as $post)
+            <x-posts.post-item :post="$post" />
+        @endforeach
+intha mari $this-> kuduthu call pannanum.. 
+
+next we are creating livewire component for Search 
+
+SearchBox
+
+cut the search code from index.blade and pasted in .. change make sure to give <livewire:search-box /> in index.blade
