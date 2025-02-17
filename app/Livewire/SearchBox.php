@@ -16,4 +16,9 @@ class SearchBox extends Component
     {
         return view('livewire.search-box');
     }
+
+    public function update(){
+        $this->dispatch('search', search: $this->search);
+
+    }
 }

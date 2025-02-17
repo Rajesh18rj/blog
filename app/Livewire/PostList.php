@@ -15,6 +15,8 @@ class PostList extends Component
 
     #[Url()]
     public $sort = 'desc';
+
+    #[Url()]
     public $search = "";
 
     public function setSort($sort){
@@ -29,7 +31,10 @@ class PostList extends Component
     #[Computed()]
     public function posts()
     {
-        return Post::published()->orderBy('published_at', $this->sort)->paginate(3);
+        return Post::published()
+            ->orderBy('published_at', $this->sort)
+            ->where('title', 'like', "%{$this->search}%")
+            ->paginate(3);
     }
     public function render()
     {

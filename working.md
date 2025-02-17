@@ -243,3 +243,42 @@ next we are creating livewire component for Search
 SearchBox
 
 cut the search code from index.blade and pasted in .. change make sure to give <livewire:search-box /> in index.blade
+
+in that Searchbox livewire component 
+
+public $search = "";
+
+    public function updatedSearch(){
+        $this->dispatch('search', search: $this->search);
+    }
+
+write this .. (this is hook method)
+
+write this in
+
+wire:model="search"
+class="w-40 ml-1 bg-transparent focus:outline-none focus:border-none focus:ring-0 outline-none border-none text-xs text-gray-800 placeholder:text-gray-400"
+type="text" placeholder="Search...">
+
+Search box blade file's input .. we are writing the search using hook so prefix Updated.. 
+
+then get the call from search box to Postlist .. becoz we want to search in Postlist so go to postlist .. 
+
+#[Url()]
+public $search = "";        -> this will get the url after we search something .. 
+
+#[On('search')]
+public function updateSearch($search){
+$this->search = $search;
+
+then write that search filter in posts function 
+
+#[Computed()]
+public function posts()
+{
+...
+->where('title', 'like', "%{$this->search}%")
+....
+}
+
+that's it now try to search , its working .. 
