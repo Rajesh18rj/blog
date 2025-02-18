@@ -315,3 +315,69 @@ then change the component name in index file tooo
     this ->    <livewire:search-box /> to 
     this ->    @include('posts.partials.search-box')
 that's it .. 
+
+# 8 
+
+we are going to create a admin panel
+(we are actually creating tags and attach to posts)
+
+go to filament 
+
+click Panel Builder
+> composer require filament/filament:"^3.2" 
+
+then 
+> php artisan filament:install --panels
+
+before we dive in lets describe the roles 
+
+Role :
+    Member / User 
+    Editor -> publish post / create categories 
+    Admin -> 
+(we are going to did that in further days ... )
+
+next we are going to create a resources 
+
+> php artisan make:filament-resource Category                -> this one for Category Model 
+> php artisan make:filament-resource Post --soft-deletes     -> this one for Post Model 
+(Why we are using soft-deletes ? we need delete something that not should be showing to users that's why)
+
+one more thing we are going to do for soft delete is , update in model 
+
+go to -> Post Model
+use SoftDeletes; (update this )
+
+after go to /admin page you can see Categories and Posts Options on left side 
+go to -> CategoryResource -> go to form section -> write as per as category table in migration 
+->schema([
+    TextInput::make('title')->required()->minLength(1)->maxLength(150),
+    TextInput::make('slug')->required()->unique(ignoreRecord: true)->minLength(1)->maxLength(150),
+    TextInput::make('text_color')->nullable(),
+    TextInput::make('bg_color')->nullable(),
+    ]);
+
+then after we typed title , we want to automatically filled slug , so 
+
+    TextInput::make('title')
+        ->live(onBlur: true)
+        ->required()->minLength(1)->maxLength(150)
+        ->afterStateUpdated(function (string $operation, $state, Set $set) {
+            if ($operation === 'edit') {
+            return;
+            }
+            $set('slug', Str::slug($state));
+        }),
+
+lets moveon to Table Section .. 
+
+    ->columns([
+        TextColumn::make('title')->sortable()->searchable(),
+        TextColumn::make('slug')->sortable()->searchable(),
+        TextColumn::make('text_color')->sortable()->searchable(),
+        TextColumn::make('bg_color')->sortable()->searchable(),
+        ])
+
+then we lets move on to Posts .. 
+
+working on forms 
