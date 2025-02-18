@@ -282,3 +282,36 @@ public function posts()
 }
 
 that's it now try to search , its working .. 
+
+# 7  
+Today we are going to see alpine js search box 
+
+previously we saw using livewire , now we are going to use alpine js 
+
+we are going to make this livewire component to laravel component .. delete SearchBox Class file 
+
+top of the div define its a alphine component , so 
+
+    <div x-data="{
+        query: '{{ request('search', '') }}'
+    }" id="search-box">
+
+then change the input wire:model to x-model , jus like this
+
+    <input x-model="query"
+
+then change the button too .. 
+
+    <x-button x-on:click="$dispatch('search', {
+    search : query
+    })"> Search </x-button>
+
+we can use x-on:click instead of @click 
+
+then change this file structure , it is in livewire folder so move in to view->posts->partials .. 
+
+then change the component name in index file tooo 
+
+    this ->    <livewire:search-box /> to 
+    this ->    @include('posts.partials.search-box')
+that's it .. 
