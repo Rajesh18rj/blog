@@ -58,7 +58,7 @@ class PostResource extends Resource
                         FileUpload::make('image')->image()->directory('posts/thumbnails'),
                         DateTimePicker::make('published_at')->nullable(),
                         Checkbox::make('featured'),
-                        Select::make('author')
+                        Select::make('user_id')
                             ->relationship('author', 'name') #we write this relationship in Post Model , that's why we are using it here ..
                             ->searchable()
                             ->required(),
