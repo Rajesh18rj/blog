@@ -381,3 +381,12 @@ lets moveon to Table Section ..
 then we lets move on to Posts .. 
 
 working on forms 
+
+# 9 adding filter by category 
+
+before we dive in , first we are going to clear the image not showing problem in posts 
+
+goto -> post-item -> change this  
+
+   src="{{ asset('storage/'.$post->image) }}"
+that's it .. now image is working perfectly ... 

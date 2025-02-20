@@ -4,7 +4,8 @@
         <div class="article-thumbnail col-span-4 flex items-center">
             <a href="" >
                 <img class="mw-100 mx-auto rounded-xl"
-                     src="{{ $post->image }}"
+                     src="{{ asset('storage/'.$post->image) }}"
+{{--                    src="{{ $post->getThumbnailImage() }}"--}}
                      alt="thumbnail">
             </a>
         </div>
